@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Museo(models.Model):
-    nummuseos = models.CharField(max_length = 5, black = True)
+    idm = models.IntegerField()
     nombre = models.CharField(max_length = 100)
     descripcion = models.TextField()
     accesibilidad = models.IntegerField(choices = ((0, '0'), (1, '1'))
