@@ -17,7 +17,7 @@ class Museo(models.Model):
     distrito = models.CharField(max_length=50, blank = True)
     latitud = models.FloatField(null = True, blank = True)
     longitud = models.FloatField(null = True, blank = True)
-    telefono = models.CharField(max_length=50, default='Sin teléfono')
+    telefono = models.CharField(max_length=50, default='S/T')
 
 class Comentario(models.Model):
     usuario = models.ForeignKey(Usuario, null = True)
