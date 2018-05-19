@@ -16,8 +16,8 @@ import xmltodict
 direcxml = 'https://datos.madrid.es/portal/site/egob/menuitem.ac61933d6ee3c31cae77ae7784f1a5a0/?vgnextoid=00149033f2201410VgnVCM100000171f5a0aRCRD&format=xml&file=0&filename=201132-0-museos&mgmtid=118f2fdbecc63410VgnVCM1000000b205a0aRCRD&preview=full'
 
 @csrf_exempt
-def Principal(request):
-	plantilla = get_template('principio.html')
+def pagprincipal(request):
+    plantilla = loader.get_template('principio.html')
     if request.method == 'POST':
         if "button" in request.POST:
             option = request.POST("button")
@@ -125,7 +125,7 @@ https://stackoverflow.com/questions/9834038/django-order-by-query-set-ascending-
         load = False
                
     context = RequestContext(request, {'listusuarios': listpreferencias, 'accesibilidad': accesibilidad, 'bestmuseos': bestmuseos, 'load': load})
-	return(plantilla.render(context))
+    return(plantilla.render(context))
 
 @csrf_exempt
  
@@ -137,8 +137,8 @@ def idmuseo(request, idm)
             comentarios = Comentario.objects.filter(museo_number = idm)
         
         except Museo.DoesNotExist:
-        	plantilla = get_template('error.html')
-        	return HttpResponse(plantilla.render(), status=404) 
+        plantilla = loader.get_template('error.html')
+            return HttpResponse(plantilla.render(), status=404) 
 # En caso de no tener accederemos a hacer un comentario de dicho museo si asi lo queremos              
     else: 
         
@@ -146,50 +146,50 @@ def idmuseo(request, idm)
         museoid = Museo.objects.get(number = idm)
         newcoment = Comentario(texto = comentario, museo = museo)
         newcoment.save()
-        plantilla = get_template('museoid.html')
-		comentarios = Comentario.object.filter(museo=museo)
-		context = RequestContext(request, {'museo': museo, 'comentarios': comentarios})
-		return(plantilla.render(context)
+        plantilla = loader.get_template('museoid.html')
+        comentarios = Comentario.object.filter(museo=museo)
+        context = RequestContext(request, {'museo': museo, 'comentarios': comentarios})
+        return(plantilla.render(context)
         
 @csrf_exempt
 
-def paginamuseos (request):
-	plantilla = get_template('pagsmuseos.html')
-	if request.method == "POST":
+def pagmuseos (request):
+    plantilla = loader.get_template('pagsmuseos.html')
+    if request.method == "POST":
 #diferenciar lo del distrito
-		if "opciones" in request.POST:
-			distrito = request.POST['opciones']
-			if distrito == "Todos"
-				listmuseos = Museo.object.all()
-			else:
-				listmuseos = Museo.object.filter(distrito = distrito)
-		else:
-			if "Activar" in request.POST:
-				auxm = request.POST['Activar']
-				#troceamos
-				idm = auxm.split(',')[0]
-				nick = auxm.split(',')[1]
-				museo = Museo.object.get(idm=idm)
-				usuario = User.object.get(username=nick)
+        if "opciones" in request.POST:
+            distrito = request.POST['opciones']
+            if distrito == "Todos"
+                listmuseos = Museo.object.all()
+            else:
+                listmuseos = Museo.object.filter(distrito = distrito)
+        else:
+            if "Activar" in request.POST:
+                auxm = request.POST['Activar']
+                #troceamos
+                idm = auxm.split(',')[0]
+                nick = auxm.split(',')[1]
+                museo = Museo.object.get(idm=idm)
+                usuario = User.object.get(username=nick)
 #para poner hora y fecha
 #https://es.stackoverflow.com/questions/121867/implementación-hora-y-fecha-en-django
 
-				hora = timezone()
-				nuevaseleccion = Registro(usuario=usuario, museo=museo, fecha=hora)
-				nuevaseleccion.save()
-			else:
-				auxm = request.POST['Desactivar']
-				#trocear
-				idm = auxm.split(',')[0]
-				nick = auxm.split(',')[1]
-				museo = Museo.object.get(idm=idm)
-				usuario = User.object.get(username=nick)
-				#debemos borrar esa seleccion
-				borrarseleccion = Registro.object.get(usuario=usuario, museo=museo)
-				borrarseleccion.delete()
-		if request.method == "GET" or "opciones"not in  request.POST:
-			listmuseos = Museo.object.all()
-			distrito = "Todos"
+                hora = timezone()
+                nuevaseleccion = Registro(usuario=usuario, museo=museo, fecha=hora)
+                nuevaseleccion.save()
+            else:
+                auxm = request.POST['Desactivar']
+                #trocear
+                idm = auxm.split(',')[0]
+                nick = auxm.split(',')[1]
+                museo = Museo.object.get(idm=idm)
+                usuario = User.object.get(username=nick)
+                #debemos borrar esa seleccion
+                borrarseleccion = Registro.object.get(usuario=usuario, museo=museo)
+                borrarseleccion.delete()
+        if request.method == "GET" or "opciones"not in  request.POST:
+            listmuseos = Museo.object.all()
+            distrito = "Todos"
 """
 #obtener valores database de la lista de distritos para 
 chat_messages.objects.all().values_list('name')
@@ -197,17 +197,64 @@ chat_messages.objects.all().values_list('name')
 mynewlist = list(myset)
 #lista->tupla
 [i[0] for i in e]
-"""	
-		listmuseos = Museo.object.all().values_list('museo')
-		listmuseo = list(set(listmuseos))
-		listmuseo = [museo[0]ofr museo in listmuseo]
-		if request.user.is_authenticated():
-			registros = Registro.objects.all().values_list('museo').filter(usuario=request.user)
-			listregistros = [registros[0]ofr registros in registros]
-		else:
-			registros = ""
-		context = RequestContext(request, {'listdistrito': listdistrito, 'museos': listmuseos, 'distrito': distrito, 'registros': listregistros})
-		return(plantilla.render(context))
+"""    
+        listmuseos = Museo.object.all().values_list('museo')
+        listmuseo = list(set(listmuseos))
+        listmuseo = [museo[0]ofr museo in listmuseo]
+        if request.user.is_authenticated():
+            registros = Registro.objects.all().values_list('museo').filter(usuario=request.user)
+            listregistros = [registros[0]ofr registros in registros]
+        else:
+            registros = ""
+        context = RequestContext(request, {'listdistrito': listdistrito, 'museos': listmuseos, 'distrito': distrito, 'registros': listregistros})
+        return HttpResponse(plantilla.render(context))
+        
+def pagUser(request, nick):
+    plantilla = loader.get_template('perfil.html')
+    if request.method == "GET":
+        try:
+            usuario = User.objects.get(username=nick)
+        except User.DoesNotExist:
+            plantilla = loader.get_template('error.html')
+            return HttpResponse(plantilla.render(),status = 404)
+        qstring = request.META['Query_String']
+    else:
+        qstring = ""
+        if request.user.is_authenticated():
+            usuario = User.objects.get(username=request.user.username)
+            try:
+                usuario = Preferencias.objects.get(usuario=usuario)
+            except:
+                otherus = User.objects.get(username=request.user.username)
+                usuario = Preferencia(usuario=otherus)
+            if 'titulo' in request.POST:
+                usuario.titulo = request.POST['titulo']
+            else:
+                usuario.tamLetra = request.POST['tamLetra']
+                usuario.color = request.POST['color']
+            usuario.save()
+            
+    usuario = User.objects.get(username=nick)
+    if qs == "":
+        registros = Registro.objects.filter(usuario=usuario)
+    else:
+        selecuser = Registro.objects.filter(id_gt=(int(qs)))
+        registros = Registro.filter(usuario=usuario)
+    
+    if len(registros) <= 5:
+        fin = True
+    else:
+        fin = False
+    
+    try:
+        usuario = Prefencia.object.get(usuario=usuario)
+    except:
+        usuario = ""
+    
+    context = RequestContext(request, {'usuario': usuario, 'nick': nick, 'preferencias': preferencias, 'end': end})
+        return HttpResponse(plantilla.render(context))
+
+
 
 @csrf_exempt
 
@@ -231,8 +278,30 @@ def Logout(request):
     return HttpResponseRedirect('/')
     
 def rss(request):
-	plantilla = get_template('rss/museo_comentarios.rss')
-	comentarios = Comentario.objects.all()
-	contexto = RequestContext(request, {'comentarios': comentarios})
-	#https://stackoverflow.com/questions/595616/what-is-the-correct-mime-type-to-use-for-an-rss-feed
-	return HttpResponse(plantilla.render(contexto),content_type="text/rss+xml")	    
+    plantilla = loader.get_template('rss/museo_comentarios.rss')
+    comentarios = Comentario.objects.all()
+    contexto = RequestContext(request, {'comentarios': comentarios})
+    #https://stackoverflow.com/questions/595616/what-is-the-correct-mime-type-to-use-for-an-rss-feed
+    return HttpResponse(plantilla.render(contexto),content_type="text/rss+xml")
+    
+def xml(request, nick):
+    try:
+        usuario = User.objects.get(username=nick)
+    except User.DoesNotExist:
+        plantilla = loader.get_template('error.html')
+
+        return HttpResponse(plantilla.render(), status=404)
+
+    plantilla = loader.get_template('xml/canal_usuario.xml')
+    registros = Registro.objects.filter(usuario=usuario)
+    context = RequestContext(request, {'usuario': usuario,
+                              'registros': registros})
+
+    return HttpResponse(plantilla.render(context), content_type="text/xml")    
+ 
+
+def about(request):
+    plantilla = loader.get_template('about.html')
+    context = RequestContext(request)
+
+    return HttpResponse(plantilla.render(context))       

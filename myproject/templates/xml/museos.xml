@@ -1,0 +1,23 @@
+
+<?xml version="1.0" encoding="UTF-8" ?>
+    <registros>
+        <titulo> Canal XML de {{ usuario }}</titulo>
+        {% for registro in registros %}
+            <museo>
+                <idm>{{ registro.museo.idm}}</idm>
+                <nombre>{{ registro.museo.nombre }}</nombre>
+                <descripcion>{{ registro.museo.descripcion }}</descripcion>
+                <accesibilidad>{{ registro.museo.accesibilidad }}</accesibilidad>
+                <url>{{ registro.museo.url }}</url>
+                <via>{{ registro.museo.via }}</via>
+                <localidad>{{ registro.museo.localidad }}</localidad>
+                <provincia>{{ registro.museo.provincia }}</provincia>
+                <codigo_postal>{{ registro.museo.codigo_postal }}</codigo_postal>
+                <barrio>{{ registro.museo.barrio }}</barrio>
+                <distrito>{{ registro.museo.distrito }}</distrito>
+                <latitud>{{ registro.museo.latitud }}</latitud>
+                <longitud>{{ registro.museo.longitud }}</longitud>
+                <telefono>{{ registro.museo.telefono }}</telefono>
+            </museo>
+        {% endfor %}
+    </registros>
