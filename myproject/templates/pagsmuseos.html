@@ -1,13 +1,12 @@
 {% extends "database.html" %}
 
-{% bock main %}
-
+{% block main %}
 {% csrf_token %}
-<div class="mainLong">
-    <h2>museos distrito</h2>
+<div class="mainLarge">
+    <h2>Filtrar museos por distrito:</h2>
     <form method="post" action="/museos">
         <select name="opciones">
-            {% for museo in listdistrito %}
+            {% for distrito in listaDistritos %}
                 {% if distrito == "" %}
                     <option value="">No especificado</option>
                 {% else %}
@@ -27,19 +26,21 @@
     {% endif %}
     {% for museo in museos %}
         <h1>{{ museo.nombre }}</h1>
-        <p><a href="/museos/{{ museo.idm }}">
-        Enlace </a></p><br /><br />
+        <p><a href="/museos/{{ museo.idEntidad }}">
+        Enlace para ver su página</a></p><br /><br />
         {% if user.is_authenticated %}
             {% if museo.id not in seleccionados %}
-                <form class="registro" method="post" action="/museos">
-                    <button type="submit" name="Activar"
-                    value="{{ museo.idm }},{{ user.username }}"
+                <form class="seleccion" method="post" action="/museos">
+                    <!-- Mostrar un valor diferente del que se envía con un botón: -->
+                    <!-- http://stackoverflow.com/questions/5701831/input-type-button-label-vs-value -->
+                    <button type="submit" name="marcar"
+                    value="{{ museo.idEntidad }},{{ user.username }}"
                     >Seleccionar</button>
                 </form>
             {% else %}
-                <form class="registro" method="post" action="/museos">
-                    <button type="submit" name="Desactivar"
-                    value="{{ museo.idm }},{{ user.username }}"
+                <form class="seleccion" method="post" action="/museos">
+                    <button type="submit" name="desmarcar"
+                    value="{{ museos.idEntidad }},{{ user.username }}"
                     >Dejar de seleccionar</button>
                 </form>
             {% endif %}
@@ -47,4 +48,3 @@
     {% endfor %}
 </div>
 {% endblock %}
-

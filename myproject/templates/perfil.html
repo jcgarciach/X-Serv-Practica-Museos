@@ -13,12 +13,12 @@
 
     {% if user.is_authenticated and user.username == nick %}
         {% csrf_token %}
-        <h2>Preferencias CSS</h2>
+        <h2>Preferencias </h2>
         <form method="post" action="/{{ user.username }}">
             <label for="size">Tamaño letra:</label>
-            <input value="{{ form.tamLetra }}" name="tamLetra"><br>
+            <input value="{{ form.tamanioLetra }}" name="tamanioLetra"><br>
             <label for="size">Color fondo:</label>
-            <input value="{{ form.color }}" name="color"><br><br>
+            <input value="{{ form.colorFondo }}" name="colorFondo"><br><br>
             <input type="submit" value="Enviar">
         </form>
         <hr />
@@ -37,20 +37,17 @@
 
 {% block main %}
 <div class="main">
-    <h2>Museos registros:</h2>
-    {% for registro in registros|slice:":5" %}
-        <h1><a href="{{ registro.museo.url }}">{{ registro.museo.nombre }}</a></h1>
-        <p>{{ registro.museo.via }} {{ registro.museo.barrio }},
-        {{ registro.museo.codigo_postal }} {{ registro.museo.localidad}}</p>
-        <p class="date"><img src="{% static 'images/more.gif' %}" alt="more"/>
-        <a href="/museos/{{ registro.museo.idm }}">Más información</a></p>
-        <p><img src="{% static 'images/timeicon.gif' %}" alt="time"/>
-        registro en: {{ registro.fecha}}</p>
+    <h2>Museos seleccionados:</h2>
+    {% for seleccionado in seleccionados|slice:":5" %}
+        <h1><a href="{{ seleccionado.museo.url }}">{{ seleccionado.museo.nombre }}</a></h1>
+        <p>{{ seleccionado.museo.via }},
+        {{ seleccionado.museo.codigo_postal }} {{ seleccionado.museo.localidad}}</p>
+        <p class="date"><img src="{% static 'imagenes/mas.gif' %}" alt="mas"/>
+        <a href="/museos/{{ seleccionado.museo.idEntidad }}">Más información</a></p>
+        Seleccionado en: {{ seleccionado.fechaHora}}</p>
         <br /><br />
-        <!-- Saber en qué pasada del bucle estamos: -->
-        <!-- http://stackoverflow.com/questions/11481499/django-iterate-number-in-for-loop-of-a-template -->
         {% if forloop.counter == 5 and not fin %}
-            <p class="mas"><a href="{{ registro.usuario }}?{{ registro.id }}">
+            <p class="mas"><a href="{{ seleccionado.usuario }}?{{ seleccionado.id }}">
             Mostrar más museos</a></p>
         {% endif %}
     {% endfor %}

@@ -1,11 +1,11 @@
 {% extends "database.html" %}
 
 {% block main %}
-<div class="mainLong">
+<div class="mainLarge">
     <h2>Características del museo:</h2>
-    <p><b>IDM:</b> {{ museo.idm}}<br>
+    <p><b>ID-ENTIDAD:</b> {{ museo.idEntidad}}<br>
     <b>NOMBRE:</b> {{ museo.nombre }}<br>
-    <b>DESCRIPCION:</b> {{museo.descripcion }}<br>
+    <b>DESCRIPCIÓN:</b> {{museo.descripcion }}<br>
     {% if museo.accesibilidad == 1 %}
         <b>ACCESIBLE:</b> Sí<br>
     {% else %}
@@ -13,8 +13,8 @@
     {% endif %}
     <b>URL:</b> <a href="{{ museo.url }}">{{ museo.url }}
     </a><br>
-    <b>DIRECCIÓN:</b> {{ museo.via }} {{ museo.localidad }},
-    {{ museo.provincia}} {{ museo.codigo_postal}}<br>
+    <b>DIRECCIÓN:</b> {{ museo.via }},
+    {{ museo.codigo_postal }} {{ museo.localidad}}<br>
     <b>BARRIO:</b> {{ museo.barrio }}<br>
     {% if museo.distrito == "" %}
         <b>DISTRITO:</b> No disponible<br>
@@ -29,7 +29,7 @@
     {% if museo.longitud == "" or museo.longitud == None %}
         <b>LONGITUD:</b> No disponible<br>
     {% else %}
-        <b>LONGITUD:</b> {{ aparcamiento.longitud }}<br>
+        <b>LONGITUD:</b> {{ museo.longitud }}<br>
     {% endif %}
     {% if museo.telefono == "S/T" or museo.telefono == "T/D" %}
         <b>TELÉFONO:</b> No disponible<br>
@@ -45,8 +45,8 @@
     {% if user.is_authenticated %}
         {% csrf_token %}
         <h2>Introduce tu comentario:</h2>
-        <form method="post" action="/museo/{{ museo.idm }}">
-            <input class="comentario" value="{{ form.text }}" name="text"><br>
+        <form method="post" action="/museos/{{ museo.idEntidad }}">
+            <input class="comentario" value="{{ form.texto }}" name="texto"><br>
             <input type="submit" value="Enviar">
         </form>
     {% endif %}

@@ -1,4 +1,4 @@
-?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
     <title>Comentarios</title>
@@ -7,7 +7,7 @@
     {% for comentario in comentarios %}
     <item>
         <title>{{ comentario.museo.nombre }}</title>
-        <link>http://localhost:1234/aparcamientos/{{ comentario.museo.idm }}</link>
+        <link>http://localhost:1234/comentarios/{{ comentario.museo.idEntidad }}</link>
         <description>{{ comentario.texto }}</description>
     </item>
     {% endfor %}
